@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Community Page - SugarSync</title>
+  <style>
+    /* General Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Header Styling */
+    header {
+      background-color: #007b83;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      position: fixed;
+      width: 100%;
+      top: 0;
+    }
+
+    header button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+    }
+
+    /* Search Bar */
+    .search-bar {
+      display: flex;
+      margin: 80px 20px 20px;
+      background-color: #f1f1f1;
+      border-radius: 25px;
+      overflow: hidden;
+    }
+
+    .search-bar input {
+      flex: 1;
+      border: none;
+      padding: 12px;
+      font-size: 1rem;
+    }
+
+    .search-btn {
+      background-color: #007b83;
+      border: none;
+      color: white;
+      padding: 12px 20px;
+      cursor: pointer;
+    }
+
+    /* Community List */
+    .community-list {
+      margin: 20px;
+    }
+
+    .community-item {
+      display: flex;
+      align-items: center;
+      background-color: #e6f7f8;
+      margin-bottom: 10px;
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    .community-logo {
+      font-size: 2rem;
+      margin-right: 15px;
+    }
+
+    /* Suggested Communities */
+    .suggested-section {
+      margin: 20px;
+    }
+
+    .suggested-title {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+
+    .suggested-container {
+      display: flex;
+      overflow-x: auto;
+      padding-bottom: 10px;
+    }
+
+    .suggested-item {
+      min-width: 150px;
+      background-color: #f0f8ff;
+      border-radius: 10px;
+      margin-right: 10px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    /* Footer */
+    footer {
+      background-color: #007b83;
+      color: white;
+      display: flex;
+      justify-content: space-around;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      padding: 10px 0;
+    }
+
+    .footer-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 0.9rem;
+    }
+
+    .footer-item span {
+      font-size: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header Section -->
+  <header>
+    <button class="back-btn">⬅️</button>
+    <h1>Community</h1>
+    <button class="profile-btn">👤</button>
+  </header>
+
+  <!-- Search Bar Section -->
+  <div class="search-bar">
+    <input type="text" placeholder="Search community..." />
+    <button class="search-btn">🔍</button>
+  </div>
+
+  <!-- Community List Section -->
+  <section class="community-list">
+    <div class="community-item">
+      <span class="community-logo">🌿</span>
+      <p>Diabetes Together</p>
+    </div>
+    <div class="community-item">
+      <span class="community-logo">💬</span>
+      <p>Wellness Connect</p>
+    </div>
+    <div class="community-item">
+      <span class="community-logo">📊</span>
+      <p>Glucose & Goals</p>
+    </div>
+    <div class="community-item">
+      <span class="community-logo">🥗</span>
+      <p>Healthy Bites Club</p>
+    </div>
+  </section>
+
+  <!-- Suggested Communities Section -->
+  <section class="suggested-section">
+    <h2 class="suggested-title">Suggested Communities</h2>
+    <div class="suggested-container">
+      <div class="suggested-item">🌼 Nutrition Network</div>
+      <div class="suggested-item">🏃 Fitness First</div>
+      <div class="suggested-item">🩸 Sugar Monitors</div>
+      <div class="suggested-item">🌞 Wellness Warriors</div>
+      <div class="suggested-item">🥦 Vegan Vibes</div>
+    </div>
+  </section>
+
+  <!-- Footer Section -->
+  <footer>
+    <div class="footer-item">
+      <span>📖</span>
+      <p>Insights</p>
+    </div>
+    <div class="footer-item">
+      <span>📊</span>
+      <p>Polls</p>
+    </div>
+    <div class="footer-item">
+      <span>📚</span>
+      <p>Resources</p>
+    </div>
+    <div class="footer-item">
+      <span>🎉</span>
+      <p>Events</p>
+    </div>
+  </footer>
+
+  <script>
+    // Back Button Navigation
+    document.querySelector(".back-btn").addEventListener("click", () => {
+      window.location.href = "../Home/Home.html";
+    });
+
+    // Simple Search Functionality
+    const searchInput = document.querySelector(".search-bar input");
+    const communityItems = document.querySelectorAll(".community-item");
+
+    searchInput.addEventListener("input", () => {
+      const filter = searchInput.value.toLowerCase();
+      communityItems.forEach((item) => {
+        const text = item.querySelector("p").textContent.toLowerCase();
+        if (text.includes(filter)) {
+          item.style.display = "flex";
+        } else {
+          item.style.display = "none";
+        }
+      });
+    });
+  </script>
+</body>
+</html>

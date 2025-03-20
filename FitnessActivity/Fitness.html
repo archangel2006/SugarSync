@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fitness & Activity</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+    }
+
+    header {
+      background-color: #007b83;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 10;
+    }
+
+    header button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+    }
+
+    .profile-icon {
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    main {
+      padding: 80px 20px 100px;
+    }
+
+    h2, h3 {
+      color: #333;
+    }
+
+    .graph-container {
+      background-color: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    canvas {
+      width: 100%;
+      max-height: 300px;
+    }
+
+    .goal-section {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+
+    button#set-goal {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .report {
+      margin-top: 20px;
+      background-color: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .scrolling-panel {
+      display: flex;
+      overflow-x: auto;
+      margin-top: 20px;
+      padding-bottom: 10px;
+      scrollbar-width: thin;
+    }
+
+    .day {
+      flex: 0 0 50px;
+      text-align: center;
+      margin-right: 10px;
+      font-size: 18px;
+    }
+
+    .day span {
+      display: block;
+      font-size: 24px;
+    }
+
+    footer {
+      background-color: #007b83;
+      color: white;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      padding: 10px 0;
+    }
+
+    .footer-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .footer-item span {
+      font-size: 1.5rem;
+      margin-bottom: 3px;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header>
+        <button class="back-btn">⬅️</button>
+        <h1>Fitness & Activity</h1>
+        <button class="profile-btn">👤</button>
+      </header>
+
+  <main>
+    <h2>Step Counter</h2>
+    <div class="graph-container">
+      <canvas id="stepChart"></canvas>
+      <div class="goal-section">
+        <p>Steps: <span id="current-steps">2000</span> / <span id="goal-steps">6000</span></p>
+        <button id="set-goal">Set Goal</button>
+      </div>
+    </div>
+
+    <div class="report">
+      <h3>Today’s Report</h3>
+      <p>Distance Walked: <b>0.99 km</b></p>
+      <p>Calories Burnt: <b>60.1</b></p>
+      <p>Time Walked: <b>20 min</b></p>
+    </div>
+
+    <h3>Daily Average: <span id="daily-average">5994</span> steps</h3>
+
+    <section class="weekly-progress">
+      <h3>Weekly Progress</h3>
+      <div class="scrolling-panel">
+        <div class="day">T <span>⭐</span></div>
+        <div class="day">F <span>⭐</span></div>
+        <div class="day">S <span>⭐</span></div>
+        <div class="day">S <span>⚪</span></div>
+        <div class="day">M <span>⚪</span></div>
+        <div class="day">T <span>⚪</span></div>
+        <div class="day">W <span>⚪</span></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-item" id="downloadReport">
+      <span>⏱️</span>
+      <p>Stopwatch
+    </div>
+    <div class="footer-item" id="shareReport">
+      <span>📊</span>
+      <p>History</p>
+    </div>
+    <div class="footer-item" id="pastReports">
+      <span>🏆</span>
+      <p>Achievements</p>
+    </div>
+    <div class="footer-item" id="addNotes">
+      <span>🥗</span>
+      <p>Food & Calories</p>
+    </div>
+  </footer>
+
+  <script>
+    const ctx = document.getElementById('stepChart').getContext('2d');
+    const stepChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['6 AM', '9 AM', '12 PM', '3 PM', '6 PM', '9 PM'],
+        datasets: [{
+          label: 'Footsteps',
+          data: [500, 1500, 3000, 4500, 5000, 6000],
+          backgroundColor: 'rgba(76, 175, 80, 0.2)',
+          borderColor: '#4CAF50',
+          borderWidth: 2
+        }]
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Nutrition</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+    }
+    /* Header */
+    header {
+      background-color: #007b83;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 10;
+    }
+
+    header button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+    }
+
+    .container {
+      padding: 20px;
+    }
+    .graph {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    canvas {
+      width: 100%;
+      height: 300px;
+    }
+    .graph-buttons button {
+      margin-right: 10px;
+      padding: 10px;
+      border-radius: 20px;
+      border: 1px solid #007bff;
+      background-color: white;
+      cursor: pointer;
+    }
+    .form-section {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input, select, textarea, button {
+      width: 100%;
+      margin-top: 5px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    .feel-options label {
+      display: inline-block;
+      margin-right: 15px;
+    }
+    button.submit {
+      background-color: #007bff;
+      color: white;
+      margin-top: 20px;
+      border: none;
+    }
+
+    /* For wider screens, show 3 small charts in a row (optional) */
+    @media (min-width: 768px) {
+      .additional-charts {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    footer {
+      background-color: #007b83;
+      color: white;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      padding: 10px 0;
+    }
+
+    .footer-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .footer-item span {
+      font-size: 1.5rem;
+      margin-bottom: 3px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <button class="back-btn">⬅️</button>
+    <h1>Monthly Health Report</h1>
+    <button class="profile-btn">👤</button>
+  </header>
+
+  <div class="container">
+    <div class="graph">
+      <canvas id="carbsChart"></canvas>
+      <div class="graph-buttons">
+        <button onclick="updateGraph('today')">Today</button>
+        <button onclick="updateGraph('weekly')">Weekly</button>
+        <button onclick="updateGraph('monthly')">Monthly</button>
+        <button onclick="updateGraph('yearly')">Yearly</button>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h2>Log Your Meal</h2>
+      <form>
+        <label>Meal Name</label>
+        <input type="text" placeholder="Enter meal name" required />
+
+        <label>Category</label>
+        <select>
+          <option>Breakfast</option>
+          <option>Lunch</option>
+          <option>Snacks</option>
+          <option>Dinner</option>
+        </select>
+
+        <label>Ingredients</label>
+        <textarea placeholder="Enter ingredients" rows="4"></textarea>
+
+        <label>Portion Size</label>
+        <input type="text" placeholder="e.g., 1 bowl, 200g" required />
+
+        <label>How did you feel after the meal?</label>
+        <div class="feel-options">
+          <label><input type="radio" name="feel" value="fine" /> Fine</label>
+          <label><input type="radio" name="feel" value="tired" /> Tired</label>
+          <label><input type="radio" name="feel" value="dizzy" /> Dizzy</label>
+          <label><input type="radio" name="feel" value="active" /> Active</label>
+        </div>
+
+        <button class="submit" type="submit">Add Meal</button>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-item" id="downloadReport">
+      <span>📷✨</span>
+      <p>Scan Meal</p>
+    </div>
+    <div class="footer-item" id="shareReport">
+      <span>🥗</span>
+      <p>Meal Plan</p>
+    </div>
+    <div class="footer-item" id="pastReports">
+      <span>🤖</span>
+      <p>AI Insights</p>
+    </div>
+    <div class="footer-item" id="addNotes">
+      <span>👩🏻‍⚕️</span>
+      <p>Consult Dietitian</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const ctx = document.getElementById('carbsChart').getContext('2d');
+    let carbsChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['00:00', '06:00', '12:00', '18:00', '24:00'],
+        datasets: [{
+          label: 'Carbs Intake',
+          data: [20, 40, 60, 30, 50],
+          borderColor: '#007bff',
+          fill: true
+        }]
+      }
+    });
+
+    function updateGraph(period) {
+      const data = {
+        today: [20, 40, 60, 30, 50],
+        weekly: [100, 150, 130, 170, 160],
+        monthly: [500, 600, 700, 800, 900],
+        yearly: [1000, 1500, 1200, 1700, 1600]
+      };
+
+      carbsChart.data.datasets[0].data = data[period];
+      carbsChart.update();
+    }
+  </script>
+</body>
+</html>

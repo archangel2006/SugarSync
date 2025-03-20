@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Glucose Tracker</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background-color: #f9f9f9;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow-x: hidden;
+    }
+
+    header {
+      background-color: #007b83;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 10;
+    }
+
+    header button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+    }
+
+    .profile-icon {
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+
+    /* Graph Section */
+    .graph {
+      width: 100%;
+      max-width: 450px;
+      height: 250px;
+      background-color: #fff;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin-bottom: 20px;
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Horizontal Glucose Meter */
+    .glucose-meter-container {
+      position: relative;
+      width: 100%;
+      max-width: 450px;
+      margin-top: 10px;
+    }
+
+    .glucose-meter {
+      width: 100%;
+      height: 30px;
+      background: linear-gradient(to right, red, yellow, green, yellow, red);
+      border-radius: 15px;
+      border: 2px solid #ccc;
+      position: relative;
+    }
+
+    .meter-pointer {
+      position: absolute;
+      width: 10px;
+      height: 40px;
+      background-color: black;
+      top: -5px;
+      border-radius: 5px;
+      transition: left 0.5s;
+    }
+
+    .pointer-value {
+      position: absolute;
+      background-color: #fff;
+      color: #000;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      top: -40px;
+      transform: translateX(-50%);
+      border: 1px solid #ccc;
+    }
+
+    /* Data Summary Section */
+    .data-summary {
+      margin-top: 20px;
+    }
+
+    .data-summary h4 {
+      margin-bottom: 10px;
+    }
+
+    .data-summary ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .data-summary li {
+      display: flex;
+      align-items: center;
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .data-summary li span {
+      margin-left: 10px;
+    }
+
+    /* Footer */
+    footer {
+      background-color: #007b83;
+      color: white;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      padding: 10px 0;
+    }
+
+    .footer-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .footer-item span {
+      font-size: 1.5rem;
+      margin-bottom: 3px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header Section -->
+  <header>
+    <button class="back-btn">⬅️</button>
+    <h1>Fitness & Activity</h1>
+    <button class="profile-btn">👤</button>
+  </header>
+
+  <!-- Main Section -->
+  <main>
+    <!-- Graph Section -->
+    <div class="graph">
+      <canvas id="glucoseChart"></canvas>
+    </div>
+
+    <!-- Horizontal Glucose Meter with Pointer -->
+    <div class="glucose-meter-container">
+      <div class="glucose-meter" id="meter">
+        <div class="meter-pointer" id="pointer">
+          <div class="pointer-value" id="pointerValue">-- mg/dL</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data Summary -->
+    <div class="data-summary">
+      <h4>📊 Average Values</h4>
+      <ul>
+        <li>🩸 <span id="glucoseLevel">Glucose: -- mg/dL</span></li>
+        <li>❤️ <span id="heartRate">Heart Rate: -- BPM</span></li>
+        <li>🩺 <span id="bloodPressure">Blood Pressure: -- / -- mmHg</span></li>
+        <li>🌬️ <span id="oxygenLevel">SpO2: -- %</span></li>
+      </ul>
+    </div>
+  </main>
+
+  <!-- Footer Section -->
+  <footer>
+    <div onclick="alert('Add Report Clicked')">➕<br>Add Report</div>
+    <div onclick="alert('Past Reports Clicked')">📊<br>Past Reports</div>
+    <div onclick="alert('Fitbit Connect Clicked')">⌚<br>Fitbit Connect</div>
+    <div onclick="alert('Gut Health Clicked')">🍎<br>Gut Health</div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    function updateGlucoseMeter(level) {
+      const pointer = document.getElementById('pointer');
+      const pointerValue = document.getElementById('pointerValue');
+      const meterWidth = document.getElementById('meter').offsetWidth;
+
+      // Define glucose range (0 to 250 mg/dL)
+      const minLevel = 0;
+      const maxLevel = 250;
+      const position = ((level - minLevel) / (maxLevel - minLevel)) * meterWidth;
+
+      pointer.style.left = `${Math.min(Math.max(position, 0), meterWidth - 10)}px`;
+      pointerValue.textContent = `${level} mg/dL`;
+
+      document.getElementById('glucoseLevel').textContent = `Glucose: ${level} mg/dL`;
+    }
+
+    function generateRandomData(min, max) {
+      return Math.floor(Math.random() * (max - min + 1) + min);
+    }
+
+    function updateGraph() {
+      const ctx = document.getElementById('glucoseChart').getContext('2d');
+      const data = {
+        labels: ['6 AM', '9 AM', '12 PM', '3 PM', '6 PM', '9 PM'],
+        datasets: [{
+          label: 'Glucose Levels (mg/dL)',
+          data: Array(6).fill().map(() => generateRandomData(70, 180)),
+          borderColor: '#007bff',
+          borderWidth: 2,
+          fill: false,
+        }]
+      };
+
+      new Chart(ctx, {
+        type: 'line',
+        data: data,
+        options: {
+          responsive: true,
+          scales: {
+            y: { beginAtZero: false }
+          }
+        }
+      });
+    }
+
+    function updateData() {
+      updateGraph();
+      const glucoseLevel = generateRandomData(70, 180);
+      const heartRate = generateRandomData(60, 120);
+      const systolicBP = generateRandomData(90, 140);
+      const diastolicBP = generateRandomData(60, 90);
+      const oxygenLevel = generateRandomData(95, 100);
+
+      updateGlucoseMeter(glucoseLevel);
+      document.getElementById('heartRate').textContent = `Heart Rate: ${heartRate} BPM`;
+      document.getElementById('bloodPressure').textContent = `Blood Pressure: ${systolicBP} / ${diastolicBP} mmHg`;
+      document.getElementById('oxygenLevel').textContent = `SpO2: ${oxygenLevel}%`;
+    }
+
+    updateData();
+    setInterval(updateData, 5000);
+  </script>
+</body>
+
+</html>

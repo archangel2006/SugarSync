@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Health Reports - SugarSync</title>
+  <!-- Inline CSS -->
+  <style>
+    /* Global Reset & Font */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      padding-top: 60px;  /* space for fixed header */
+      padding-bottom: 70px; /* space for fixed footer */
+      background-color: #f9f9f9;
+    }
+
+    /* Header */
+    header {
+      background-color: #007b83;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 10;
+    }
+
+    header button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+    }
+
+    /* Chart Container */
+    .chart-container {
+      background-color: #fff;
+      margin: 20px;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .chart-container h2 {
+      margin-bottom: 10px;
+      text-align: center;
+      font-weight: normal;
+      color: #333;
+    }
+
+    /* Canvas for charts */
+    canvas {
+      width: 100% !important;
+      max-height: 250px;
+    }
+
+    /* Summarized Report */
+    .summary {
+      background-color: #fff;
+      margin: 20px;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .summary h3 {
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .summary ul {
+      list-style: none;
+      line-height: 1.8;
+    }
+
+    /* Additional Charts Container */
+    .additional-charts {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      margin: 20px;
+    }
+
+    /* For wider screens, show 3 small charts in a row (optional) */
+    @media (min-width: 768px) {
+      .additional-charts {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    /* Footer */
+    footer {
+      background-color: #007b83;
+      color: white;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      padding: 10px 0;
+    }
+
+    .footer-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .footer-item span {
+      font-size: 1.5rem;
+      margin-bottom: 3px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <button class="back-btn">⬅️</button>
+    <h1>Monthly Health Report</h1>
+    <button class="profile-btn">👤</button>
+  </header>
+
+  <!-- Blood Sugar Chart -->
+  <div class="chart-container">
+    <h2>Blood Sugar Level</h2>
+    <canvas id="bloodSugarChart"></canvas>
+  </div>
+
+  <!-- Summarized Report -->
+  <div class="summary">
+    <h3>Summarized Report</h3>
+    <ul>
+      <li><strong>Current Status (Blood Glucose):</strong> 98 mg/dL</li>
+      <li><strong>Average Blood Glucose :</strong> 90 mg/dL</li>
+      <br>
+      <li><strong>Blood Pressure:</strong> 123/70 mmHg</li>
+      <li><strong>Heart Rate:</strong> 78 bpm</li>
+      <li><strong>Oxygen Level:</strong> 98%</li>
+      <li><strong>Haemoglobin:</strong> 16 g/dL</li>
+      <li><strong>Thyroid:</strong> 5 mIU/L</li>
+    </ul>
+  </div>
+
+  <!-- Additional Charts -->
+  <div class="additional-charts">
+    <!-- Heart Rate Chart -->
+    <div class="chart-container">
+      <h2>Heart Rate</h2>
+      <canvas id="heartRateChart"></canvas>
+    </div>
+    <!-- Oxygen Level Chart -->
+    <div class="chart-container">
+      <h2>Oxygen Level</h2>
+      <canvas id="oxygenChart"></canvas>
+    </div>
+    <!-- Blood Pressure Chart -->
+    <div class="chart-container">
+      <h2>Blood Pressure</h2>
+      <canvas id="bloodPressureChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-item" id="downloadReport">
+      <span>⬇️</span>
+      <p>Download</p>
+    </div>
+    <div class="footer-item" id="shareReport">
+      <span>🔗</span>
+      <p>Share</p>
+    </div>
+    <div class="footer-item" id="pastReports">
+      <span>📃</span>
+      <p>Past</p>
+    </div>
+    <div class="footer-item" id="addNotes">
+      <span>📝</span>
+      <p>Add Notes</p>
+    </div>
+  </footer>
+
+  
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  
+  <script>
+
+    // Back Button Navigation
+    document.querySelector(".back-btn").addEventListener("click", () => {
+      window.location.href = "../Home/Home.html";
+    });
+
+    
+    // ================================
+    // 1. Blood Sugar Chart
+    // ================================
+    const bloodSugarCtx = document.getElementById('bloodSugarChart').getContext('2d');
+    const bloodSugarChart = new Chart(bloodSugarCtx, {
+      type: 'line',
+      data: {
+        // In many conventional charts: x-axis is time (days), y-axis is mg/dL
+        // but adjusting to your note: x-axis = mg/dL, y-axis = weeks.
+        labels: ['Week1', 'Week2', 'Week3', 'Week4', 'Week5'],
+        datasets: [{
+          label: 'Blood Sugar (mg/dL)',
+          data: [95, 100, 85, 110, 90],
+          backgroundColor: 'rgba(0, 123, 131, 0.2)',
+          borderColor: 'rgba(0, 123, 131, 1)',
+          borderWidth: 2,
+          fill: true,
+          tension: 0.1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            title: {
+              display: true,
+              text: 'Blood Sugar (mg/dL)'
+            },
+            beginAtZero: true,
+            suggestedMax: 120
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Days of Month'
+            }
+          }
+        }
+      }
+    });
+
+    // ================================
+    // 2. Heart Rate Chart
+    // ================================
+    const heartRateCtx = document.getElementById('heartRateChart').getContext('2d');
+    const heartRateChart = new Chart(heartRateCtx, {
+      type: 'line',
+      data: {
+        labels: ['Week1', 'Week2', 'Week3', 'Week4', 'Week5'],
+        datasets: [{
+          label: 'Heart Rate (bpm)',
+          data: [72, 78, 80, 76, 75],
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 2,
+          fill: true,
+          tension: 0.1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            title: {
+              display: true,
+              text: 'Heart Rate (bpm)'
+            },
+            beginAtZero: true,
+            suggestedMax: 100
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Days of Month'
+            }
+          }
+        }
+      }
+    });
+
+    // ================================
+    // 3. Oxygen Level Chart
+    // ================================
+    const oxygenCtx = document.getElementById('oxygenChart').getContext('2d');
+    const oxygenChart = new Chart(oxygenCtx, {
+      type: 'line',
+      data: {
+        labels: ['Week1', 'Week2', 'Week3', 'Week4', 'Week5'],
+        datasets: [{
+          label: 'Oxygen Level (%)',
+          data: [98, 99, 97, 98, 99],
+          backgroundColor: 'rgba(54, 162, 235, 0.2)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 2,
+          fill: true,
+          tension: 0.1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            title: {
+              display: true,
+              text: 'Oxygen (%)'
+            },
+            beginAtZero: true,
+            suggestedMax: 100
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Days of Month'
+            }
+          }
+        }
+      }
+    });
+
+    // ================================
+    // 4. Blood Pressure Chart
+    // ================================
+    const bloodPressureCtx = document.getElementById('bloodPressureChart').getContext('2d');
+    const bloodPressureChart = new Chart(bloodPressureCtx, {
+      type: 'line',
+      data: {
+        labels: ['Week1', 'Week2', 'Week3', 'Week4', 'Week5'],
+        datasets: [{
+          label: 'Blood Pressure (Systolic)',
+          data: [120, 125, 118, 123, 121],
+          backgroundColor: 'rgba(255, 206, 86, 0.2)',
+          borderColor: 'rgba(255, 206, 86, 1)',
+          borderWidth: 2,
+          fill: true,
+          tension: 0.1
+        },
+        {
+          label: 'Blood Pressure (Diastolic)',
+          data: [80, 82, 78, 79, 80],
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 2,
+          fill: true,
+          tension: 0.1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            title: {
+              display: true,
+              text: 'mmHg'
+            },
+            beginAtZero: false,
+            suggestedMax: 140
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Days of Month'
+            }
+          }
+        }
+      }
+    });
+
+    // ================================
+    // Footer Buttons (Just Demo Alerts)
+    // ================================
+    document.getElementById("downloadReport").addEventListener("click", () => {
+      alert("Download report clicked!");
+    });
+
+    document.getElementById("shareReport").addEventListener("click", () => {
+      alert("Share report clicked!");
+    });
+
+    document.getElementById("pastReports").addEventListener("click", () => {
+      alert("Past reports clicked!");
+    });
+
+    document.getElementById("addNotes").addEventListener("click", () => {
+      alert("Add notes clicked!");
+    });
+
+    // Back & Profile Buttons
+    document.querySelector(".back-btn").addEventListener("click", () => {
+      alert("Back button clicked!");
+    });
+    document.querySelector(".profile-btn").addEventListener("click", () => {
+      alert("Profile button clicked!");
+    });
+  </script>
+</body>
+</html>
