@@ -107,6 +107,15 @@
       border: 1px solid #ccc;
     }
 
+    .meter-labels {
+      display: flex;
+      justify-content: space-between;
+      max-width: 450px;
+      margin-top: 5px;
+      font-size: 12px;
+      color: #555;
+    }
+
     /* Data Summary Section */
     .data-summary {
       margin-top: 20px;
@@ -157,6 +166,57 @@
       font-size: 1.5rem;
       margin-bottom: 3px;
     }
+
+    /* Add Report*/
+    .popup-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .popup {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 300px;
+    }
+
+    .popup label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    .popup input, .popup select, .popup button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .popup button {
+      background-color: #007b83;
+      color: white;
+      cursor: pointer;
+    }
+
+    .popup button:hover {
+      background-color: #005f61;
+    }
+
+    /* For wider screens, show 3 small charts in a row (optional) */
+    @media (min-width: 768px) {
+      .additional-charts {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    
   </style>
 </head>
 
@@ -181,12 +241,19 @@
         <div class="meter-pointer" id="pointer">
           <div class="pointer-value" id="pointerValue">-- mg/dL</div>
         </div>
+        <div class="meter-labels">
+          <span>50</span>
+          <span>70</span>
+          <span>100</span>
+          <span>130</span>
+          <span>200</span>
+        </div>
       </div>
     </div>
 
     <!-- Data Summary -->
     <div class="data-summary">
-      <h4>📊 Today </h4>
+      <h4>📊 Today's Average</h4>
       <ul>
         <li>🩸 <span id="glucoseLevel">Average Blood Glucose: -- mg/dL</span></li>
         <li>❤️ <span id="heartRate">Heart Rate: -- BPM</span></li>
@@ -195,13 +262,34 @@
       </ul>
     </div>
   </main>
+  <!-- Popup Section -->
+  <div class="popup-overlay" id="popupOverlay">
+    <div class="popup">
+      <h3>Add Glucose Report</h3>
+      <label for="time">Select Time:</label>
+      <input type="time" id="time" />
+
+      <label for="type">Select Type:</label>
+      <select id="type">
+        <option>Normal</option>
+        <option>Fasting</option>
+        <option>Post Meal</option>
+      </select>
+
+      <label for="glucose">Sugar Level (mg/dL):</label>
+      <input type="number" id="glucose" placeholder="Enter Glucose Level" />
+
+      <button onclick="submitReport()">Add Report</button>
+      <button onclick="closePopup()">Cancel</button>
+    </div>
+  </div>
 
   <!-- Footer Section -->
   <footer>
-    <div onclick="alert('Add Report Clicked')">➕<br>Add Report</div>
-    <div onclick="alert('Past Reports Clicked')">📊<br>Past Reports</div>
-    <div onclick="alert('Fitbit Connect Clicked')">⌚<br>Fitbit Connect</div>
-    <div onclick="alert('Gut Health Clicked')">🍎<br>Gut Health</div>
+    <div onclick="openPopup()">➕<br>Add Report</div>
+    <div>📊<br>Past Reports</div>
+    <div>⌚<br>Fitbit Connect</div>
+    <div style="color:gold;">🍎<br>Gut Health</div>
   </footer>
 
   <!-- JavaScript -->
@@ -274,6 +362,30 @@
 
     updateData();
     setInterval(updateData, 5000);
+
+
+    // Add REport//
+    function openPopup() {
+      document.getElementById('popupOverlay').style.display = 'flex';
+    }
+
+    function closePopup() {
+      document.getElementById('popupOverlay').style.display = 'none';
+    }
+
+    function submitReport() {
+      const time = document.getElementById('time').value;
+      const type = document.getElementById('type').value;
+      const glucose = document.getElementById('glucose').value;
+
+      if (!time || !glucose) {
+        alert('Please fill in all fields.');
+        return;
+      }
+
+      alert(`Report Added:\nTime: ${time}\nType: ${type}\nGlucose Level: ${glucose} mg/dL`);
+      closePopup();
+    }
   </script>
 </body>
 
