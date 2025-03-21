@@ -5,13 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Smart Nutrition</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
+    /* General Reset */
+    * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      margin-top:100px;;
+      margin-bottom:80px;
       background-color: #f9f9f9;
     }
-    /* Header */
+    /* Header  */
     header {
       background-color: #007b83;
       color: white;
@@ -20,9 +27,8 @@
       align-items: center;
       padding: 15px;
       position: fixed;
-      top: 0;
       width: 100%;
-      z-index: 10;
+      top: 0;
     }
 
     header button {
@@ -33,10 +39,9 @@
       cursor: pointer;
     }
 
-    header h1 {
+    h1 {
       font-size: 1.5rem;
     }
-
     .container {
       padding: 20px;
     }
@@ -122,7 +127,7 @@
   <!-- Header -->
   <header>
     <button class="back-btn">⬅️</button>
-    <h1>Monthly Health Report</h1>
+    <h1>Smart Nutrition</h1>
     <button class="profile-btn">👤</button>
   </header>
 
@@ -191,6 +196,13 @@
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
+
+    //
+    // Back Button Navigation
+    document.querySelector(".back-btn").addEventListener("click", () => {
+      window.location.href = "../Home/Home.html";
+    });
+    
     const ctx = document.getElementById('carbsChart').getContext('2d');
     let carbsChart = new Chart(ctx, {
       type: 'line',
@@ -206,16 +218,25 @@
     });
 
     function updateGraph(period) {
-      const data = {
-        today: [20, 40, 60, 30, 50],
-        weekly: [100, 150, 130, 170, 160],
-        monthly: [500, 600, 700, 800, 900],
-        yearly: [1000, 1500, 1200, 1700, 1600]
-      };
+  const data = {
+    today: [30,25,20,15,19],
+    weekly: [160,170,130,150,100],
+    monthly: [790, 770, 740, 650, 670],
+    yearly: [1600, 1700,1200,1500,1000]
+  };
 
-      carbsChart.data.datasets[0].data = data[period];
-      carbsChart.update();
-    }
+  const labels = {
+    today: ['00:00', '06:00', '12:00', '18:00', '24:00'],
+    weekly: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+    monthly: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5'],
+    yearly: ['Jan', 'Apr', 'Jul', 'Oct', 'Dec']
+  };
+
+  // Update the graph data and labels
+  carbsChart.data.datasets[0].data = data[period];
+  carbsChart.data.labels = labels[period];
+  carbsChart.update();
+}
   </script>
 </body>
 </html>

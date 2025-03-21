@@ -1,69 +1,240 @@
-1 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-    <link rel="stylesheet" href="HomeStyle.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SugarSync</title>
+  <style>
+    /* General Styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+    }
+
+    /* Header Styling */
+    header {
+      background-color: #007b83;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      position: fixed;
+      width: 100%;
+      top: 0;
+    }
+
+    header button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+    }
+
+    /* Vitals Panel */
+    .vitals {
+      margin-top: 100px;
+      margin-left:20px;
+      margin-right:20px;
+      display: flex;
+      justify-content: space-around;
+      background-color: white;
+      padding: 8px;
+      border:solid #007b83;
+      border-radius: 20px;
+    }
+
+    .vital img {
+      width: 70px;
+      height: 70px;
+    }
+
+    /* Features Section */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin: 20px;
+    }
+
+    .feature {
+      background-color: white;
+      border:solid #007b83;
+      padding: 30px;
+      text-align: center;
+      border-radius: 12px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: transform 0.3s ease-in-out; /* Smooth animation */
+      display: block; /* Ensure it scales properly */
+      box-shadow: #007b83;
+    }
+
+    .feature:hover {
+      transform: scale(1.15);
+    }
+
+    /* Footer */
+    footer {
+      background-color: #007b83;
+      color: white;
+      display: flex;
+      justify-content: space-around;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      padding: 10px 0;
+    }
+
+    .footer-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 0.9rem;
+    }
+
+    .footer-item span {
+      font-size: 1.5rem;
+    }
+
+    footer button {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    /* Dark Mode */
+    .dark-mode {
+      background-color: #222;
+      color: white;
+    }
+
+    .dark-mode .feature, 
+    .dark-mode .vitals {
+      background-color: #333;
+    }
+
+    /* Settings Popup */
+    .popup {
+      display: none;
+      position: fixed;
+      top: 20%;
+      left: 50%;
+      transform: translate(-50%, 0);
+      background-color: white;
+      border-radius: 12px;
+      width: 300px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+
+    .popup-content {
+      padding: 20px;
+    }
+
+    .popup-content h2 {
+      margin-top: 0;
+    }
+
+    .popup-content label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .popup-content button {
+      margin-top: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="head">
-            <img class="logo" src="" alt="SugarSync"/>
-            <h1>SugarSync</h1>
-            <a class="profile-button" href="../Home/Profile.html" >
-                <img  class="profile-icon" src="" alt="Profile" >
-        </div>
-    </header>
 
-    <!--Live Vitals-->
+  <!-- Header Section -->
+  <header>
+    <div class="logo" style="display: flex; align-items: center;">
+      <img src="https://i.pinimg.com/736x/87/f2/d9/87f2d926b15de05e5852f40a25978a20.jpg" 
+           style="width: 50px; height: 50px; margin-right: 10px; border-radius:8px;">
+      <h1 style="margin: 0;">SugarSync</h1>
+    </div>
+    <button class="profile-btn">👤</button>
+  </header>
+
+  <!-- Vitals Panel -->
+  <section class="vitals" style="background-color: black;">
     <div class="vital">
-        <img src="C:/Users/DELL/Desktop/Screenshot 2025-03-20 210625.png">
-        
+      <img src="https://i.pinimg.com/736x/f3/32/26/f332264823a98ba6d38580aadd04c338.jpg" alt="Glucose Meter">
+      
     </div>
-
-    <!---Features-->
-    <div class="grid-container">
-        <div class="grid-item">
-            <a href="../GlucoseTracker/GlucoseTracker.html">
-                <img src="" alt="GlucoseMonitor">
-            </a>
-        </div>
-        <div class="grid-item">
-            <a href="../Mediactions/Medications.html">
-                <img src="" alt="Medications">
-            </a>
-        </div>
-        <div class="grid-item">
-            <a href="../SmartNutrition/SmartNutrition.html">
-                <img src="https://i.pinimg.com/474x/6d/8c/98/6d8c983e5deca794ca65a17ddeac0672.jpg" alt="SmartNutrition">
-            </a>
-        </div>
-        <div class="grid-item">
-            <a href="../FitnessActivity/FitnessActivity.html">
-                <img src="" alt="FitnessActivity">
-            </a>
-        </div>
-        <div class="grid-item">
-            <a href="../HealthReports/HealthReports.html">
-                <img src="" alt="HealthReports">
-            </a>
-        </div>
-        <div class="grid-item">
-            <a href="../CommunitySupport/CommunitySupport.html">
-                <img src="" alt="CommunitySupport">
-            </a>
-        </div>
+    <div class="vital">
+      <img src="https://i.pinimg.com/736x/ae/19/02/ae19023c3e2768828a6d200e2bc4f912.jpg" alt="Heart Rate">
+      
     </div>
-
-    <!-- Footer -->
-     <footer>
-        <button class="footer-btn">AI Assistant</button>
-        <button class="footer-btn">Dark Mode</button>
-        <button class="footer-btn">Settings</button>
-     </footer>
-
+    <div class="vital">
+      <img src="https://i.pinimg.com/474x/94/0c/d2/940cd2aae7826ec21ec2b374fcba5ffa.jpg" alt="Blood Pressure">
+      
+    </div>
+    <div class="vital">
+      <img src="https://i.pinimg.com/736x/a6/91/62/a6916273a8c7ac81883019a16bda1711.jpg" alt="Oxygen Level">
     
+    </div>
+  </section>
+
+  <!-- Feature Panels -->
+  <section class="features">
+    <div class="feature" onclick="location.href='../GlucoseMonitor/GlucoseMonitor.html'">📊 Glucose Monitor</div>
+    <div class="feature" onclick="location.href='../Medications/Medications.html'">💊 Medications</div>
+    <div class="feature" onclick="location.href='../SmartNutrition/SmartNutrition.html'">🥗 Smart Nutrition</div>
+    <div class="feature" onclick="location.href='../FitnessActivity/Fitness.html'">🏃 Fitness & Activity</div>
+    <div class="feature" onclick="location.href='../HealthReports/HealthReports.html'">📑 Health Reports</div>
+    <div class="feature" onclick="location.href='../CommunitySupport/Community.html'">🌐 Community & Support</div>
+  </section>
+
+  <!-- Footer Section -->
+  <footer>
+    <div class="footer-item">🤖 AI Assistant</div>
+    <button id="darkModeToggle">🌙 Dark Mode</button>
+    <button id="settingsBtn">⚙️ Settings</button>
+  </footer>
+
+  <!-- Settings Popup -->
+  <div id="settingsPopup" class="popup">
+    <div class="popup-content">
+      <h2>Settings</h2>
+      <label><input type="checkbox"> Notifications</label>
+      <label><input type="checkbox"> Data Sync</label>
+      <label><input type="checkbox"> Health Alerts</label>
+      <button onclick="closeSettings()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    // Dark Mode Toggle
+    document.getElementById("darkModeToggle").addEventListener("click", function() {
+      document.body.classList.toggle("dark-mode");
+    });
+
+    // Settings Popup Control
+    document.getElementById("settingsBtn").addEventListener("click", function() {
+      document.getElementById("settingsPopup").style.display = "block";
+    });
+
+    function closeSettings() {
+      document.getElementById("settingsPopup").style.display = "none";
+    }
+  </script>
+
 </body>
 </html>

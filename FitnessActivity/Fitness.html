@@ -146,16 +146,16 @@
     <div class="graph-container">
       <canvas id="stepChart"></canvas>
       <div class="goal-section">
-        <p>Steps: <span id="current-steps">2000</span> / <span id="goal-steps">6000</span></p>
+        <p>Steps: <span id="current-steps">5500</span> / <span id="goal-steps">6000</span></p>
         <button id="set-goal">Set Goal</button>
       </div>
     </div>
 
     <div class="report">
       <h3>Today’s Report</h3>
-      <p>Distance Walked: <b>0.99 km</b></p>
-      <p>Calories Burnt: <b>60.1</b></p>
-      <p>Time Walked: <b>20 min</b></p>
+      <p>Distance Walked: <b>3.2 km</b></p>
+      <p>Calories Burnt: <b>160.1</b></p>
+      <p>Time Walked: <b>1hr 20min</b></p>
     </div>
 
     <h3>Daily Average: <span id="daily-average">5994</span> steps</h3>
@@ -177,7 +177,7 @@
   <footer>
     <div class="footer-item" id="downloadReport">
       <span>⏱️</span>
-      <p>Stopwatch
+      <p>Stopwatch</p>
     </div>
     <div class="footer-item" id="shareReport">
       <span>📊</span>
@@ -194,6 +194,12 @@
   </footer>
 
   <script>
+
+    //Back Button Navigation
+    document.querySelector(".back-btn").addEventListener("click",() =>{
+      window.location.href="../Home/Home.html";
+    });
+
     const ctx = document.getElementById('stepChart').getContext('2d');
     const stepChart = new Chart(ctx, {
       type: 'line',
@@ -201,13 +207,26 @@
         labels: ['6 AM', '9 AM', '12 PM', '3 PM', '6 PM', '9 PM'],
         datasets: [{
           label: 'Footsteps',
-          data: [500, 1500, 3000, 4500, 5000, 6000],
+          data: [500, 1000, 2000, 3500, 4000, 5500],
           backgroundColor: 'rgba(76, 175, 80, 0.2)',
           borderColor: '#4CAF50',
           borderWidth: 2
         }]
       }
     });
+
+    document.addEventListener("DOMContentLoaded", function () {
+      document.getElementById("set-goal").addEventListener("click", function () { 
+          let newGoal = prompt("Enter your new step goal:");
+          if (newGoal !== null && newGoal.trim() !== "" && !isNaN(newGoal) && Number(newGoal) > 0) {
+              document.getElementById("goal-steps").textContent = Number(newGoal);
+          } else if (newGoal !== null) {
+              alert("Please enter a valid number!");
+          }
+      });
+  });
+
+
   </script>
 </body>
 </html>

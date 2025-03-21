@@ -14,13 +14,10 @@
       font-family: Arial, sans-serif;
     }
 
-    body {
-      background-color: #f9f9f9;
-      color: #333;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      overflow-x: hidden;
+    body{
+      margin-top:100px;
+      margin-bottom:80px;
+      
     }
 
     header {
@@ -167,7 +164,7 @@
   <!-- Header Section -->
   <header>
     <button class="back-btn">⬅️</button>
-    <h1>Fitness & Activity</h1>
+    <h1>Glucose Monitor</h1>
     <button class="profile-btn">👤</button>
   </header>
 
@@ -189,9 +186,9 @@
 
     <!-- Data Summary -->
     <div class="data-summary">
-      <h4>📊 Average Values</h4>
+      <h4>📊 Today </h4>
       <ul>
-        <li>🩸 <span id="glucoseLevel">Glucose: -- mg/dL</span></li>
+        <li>🩸 <span id="glucoseLevel">Average Blood Glucose: -- mg/dL</span></li>
         <li>❤️ <span id="heartRate">Heart Rate: -- BPM</span></li>
         <li>🩺 <span id="bloodPressure">Blood Pressure: -- / -- mmHg</span></li>
         <li>🌬️ <span id="oxygenLevel">SpO2: -- %</span></li>
@@ -209,6 +206,13 @@
 
   <!-- JavaScript -->
   <script>
+
+    // Back Button Navigation
+    document.querySelector(".back-btn").addEventListener("click", () => {
+      window.location.href = "../Home/Home.html";
+    });
+
+    
     function updateGlucoseMeter(level) {
       const pointer = document.getElementById('pointer');
       const pointerValue = document.getElementById('pointerValue');

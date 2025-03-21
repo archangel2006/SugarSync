@@ -14,10 +14,8 @@
       font-family: Arial, sans-serif;
     }
 
-    body {
-      padding-top: 60px;  /* space for fixed header */
-      padding-bottom: 70px; /* space for fixed footer */
-      background-color: #f9f9f9;
+    body{
+      margin-top:100px;
     }
 
     /* Header */
@@ -31,7 +29,7 @@
       position: fixed;
       top: 0;
       width: 100%;
-      z-index: 10;
+
     }
 
     header button {
@@ -401,13 +399,7 @@
       alert("Add notes clicked!");
     });
 
-    // Back & Profile Buttons
-    document.querySelector(".back-btn").addEventListener("click", () => {
-      alert("Back button clicked!");
-    });
-    document.querySelector(".profile-btn").addEventListener("click", () => {
-      alert("Profile button clicked!");
-    });
+    
   </script>
 </body>
 </html>

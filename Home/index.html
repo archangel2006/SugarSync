@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to SugarSync</title>
+  <style>
+    /* Apply background color and center elements */
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  background-color: #007b83; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+}
+
+/* Container styling */
+.container {
+  text-align: center;
+  background-color:white; /* Light Transparent White */
+  padding: 50px;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Logo Styling */
+.logo {
+  width: 150px;
+  margin-bottom: 20px;
+}
+
+/* Heading Styling */
+h1 {
+  font-size: 2.5rem;
+  color: #333;
+}
+
+/* Button Styling */
+button {
+  background-color: #4CAF50; /* Green */
+  color: white;
+  font-size: 1.2rem;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+  </style>
+</head>
+<body>
+  <!-- Main Container -->
+  <div class="container">
+    <img src="https://i.pinimg.com/736x/87/f2/d9/87f2d926b15de05e5852f40a25978a20.jpg" alt="SugarSync Logo" class="logo" />
+    <h1>SugarSync</h1>
+    <button onclick="startJourney()">Start Journey</button>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    function startJourney() {
+      window.location.href = "SignUp.html";
+    }
+  </script>
+</body>
+</html>
